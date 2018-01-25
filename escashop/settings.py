@@ -227,3 +227,5 @@ OSCAR_DASHBOARD_NAVIGATION.append({
 })
 
 OSCAR_SHOP_NAME = 'Escahub'
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
