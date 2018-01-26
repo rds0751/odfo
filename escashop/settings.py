@@ -86,7 +86,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'hi-in'
 
 TIME_ZONE = 'UTC'
 
@@ -188,20 +188,6 @@ OSCAR_ORDER_STATUS_PIPELINE = {
 
 OSCAR_DEFAULT_CURRENCY = "INR"
 
-
-# paypal
-from django.utils.translation import ugettext_lazy as _
-OSCAR_DASHBOARD_NAVIGATION.append({
-    'label': _('PayPal'),
-    'icon': 'icon-globe',
-    'children': [
-        {
-            'label': _('Express transactions'),
-            'url_name': 'paypal-express-list',
-        },
-    ]
-})
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
@@ -215,6 +201,7 @@ PAYU_INFO = {
     }
 }
 
+from django.utils.translation import ugettext_lazy as _
 OSCAR_DASHBOARD_NAVIGATION.append({
     'label': _('Payu'),
     'icon': 'icon-globe',
@@ -227,5 +214,24 @@ OSCAR_DASHBOARD_NAVIGATION.append({
 })
 
 OSCAR_SHOP_NAME = 'Escahub'
+OSCAR_SHOP_TAGLINE = 'Trips Designed Only For You'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+PAYPAL_API_USERNAME = 'paypal_seller_username'
+PAYPAL_API_PASSWORD = 'paypal_seller_password'
+PAYPAL_API_SIGNATURE = '...'
+
+# the dashboard navigation is fully customizable via settings, in this case we just append the paypal menu item
+OSCAR_DASHBOARD_NAVIGATION.append({
+    'label': _('PayPal'),
+    'icon': 'icon-globe',
+    'children': [
+        {
+            'label': _('Express transactions'),
+            'url_name': 'paypal-express-list',
+        },
+    ]
+})
+
+INSTALLED_APPS += ['paypal']
