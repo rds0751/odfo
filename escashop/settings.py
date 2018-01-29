@@ -86,7 +86,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'hi-in'
+LANGUAGE_CODE = 'en-in'
 
 TIME_ZONE = 'UTC'
 
@@ -194,44 +194,41 @@ OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
 PAYU_INFO = {
     'INR': {
-        'merchant_key': "gtKFFx",
-        'merchant_salt': "eCwWELxi",
+        'merchant_key': "XXWDBdHI",
+        'merchant_salt': "jdQK6QPc7i",
         # for production environment use 'https://secure.payu.in/_payment'
         'payment_url': 'https://test.payu.in/_payment',
     }
 }
 
+
 from django.utils.translation import ugettext_lazy as _
 OSCAR_DASHBOARD_NAVIGATION.append({
-    'label': _('Payu'),
-    'icon': 'icon-globe',
-    'children': [
-        {
-            'label': _('Payu transactions'),
-            'url_name': 'payu-nonseamless-list',
-        },
-    ]
+'label': _('Payments'),
+'icon': 'icon-globe',
+'children': [
+{
+'label': _('Paypal Express transactions'),
+'url_name': 'paypal-express-list',
+},
+{
+'label': _('Payu transactions'),
+'url_name': 'payu-nonseamless-list',
+},
+{
+'label': _('COD Transaction Lists'),
+'url_name': 'cashondelivery-transaction-list',
+},
+]
 })
 
 OSCAR_SHOP_NAME = 'Escahub'
-OSCAR_SHOP_TAGLINE = 'Trips Designed Only For You'
+OSCAR_SHOP_TAGLINE = "It's a huge world, 'Lets get an Escape with Esca'"
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PAYPAL_API_USERNAME = 'paypal_seller_username'
-PAYPAL_API_PASSWORD = 'paypal_seller_password'
-PAYPAL_API_SIGNATURE = '...'
-
-# the dashboard navigation is fully customizable via settings, in this case we just append the paypal menu item
-OSCAR_DASHBOARD_NAVIGATION.append({
-    'label': _('PayPal'),
-    'icon': 'icon-globe',
-    'children': [
-        {
-            'label': _('Express transactions'),
-            'url_name': 'paypal-express-list',
-        },
-    ]
-})
+PAYPAL_API_USERNAME = 'rsingh_bemba16-facilitator_api1.thapar.edu'
+PAYPAL_API_PASSWORD = 'ZCH7HQ3HQSPC785P'
+PAYPAL_API_SIGNATURE = 'AFOw2MWb86KxVcUnsoMYwWfZLbwoAt1tbTRzSgr5gTTMJuwXLoVsgpB3'
 
 INSTALLED_APPS += ['paypal']

@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+  
 import json
 import logging
 
@@ -11,13 +11,19 @@ from django.shortcuts import get_object_or_404
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView, FormView
+
 from oscar.core.exceptions import ModuleNotFoundError
 from oscar.core.loading import get_class, get_model
 
 from payu.exceptions import PayuError
-from payu.nonseamless.exceptions import EmptyBasketException, InvalidBasket, MissingShippingAddressException, \
-    MissingShippingMethodException
-from payu.nonseamless.facade import set_txn, generate_hash, verify_hash, PAYU_INFO
+from payu.nonseamless.exceptions import EmptyBasketException
+from payu.nonseamless.exceptions import InvalidBasket
+from payu.nonseamless.exceptions import MissingShippingAddressException
+from payu.nonseamless.exceptions import MissingShippingMethodException
+from payu.nonseamless.facade import generate_hash
+from payu.nonseamless.facade import PAYU_INFO
+from payu.nonseamless.facade import set_txn
+from payu.nonseamless.facade import verify_hash
 
 # Load views dynamically
 from payu.nonseamless.forms import PayUForm
@@ -93,7 +99,7 @@ class RedirectView(CheckoutSessionMixin, RedirectView):
         if basket.is_empty:
             raise EmptyBasketException()
 
-        # redirect to forms page where form would submit through webpage to payu
+        # redirect to forms page where form would submit through webpage to PayU
         # record the transaction
         shipping_addr = self.get_shipping_address(basket)
         order_total = self.build_submission()['order_total']
@@ -110,24 +116,26 @@ class RedirectView(CheckoutSessionMixin, RedirectView):
         Return any additional PayPal parameters
         """
         PAYU_INFO = {
-            'merchant_key': "C0Dr8m",
-            'merchant_salt': "3sf0jURk",
-            # for production environment use 'https://secure.payu.in/_payment'
-            'payment_url': 'https://test.payu.in/_payment',
+            'INR': {
+                'merchant_key': "XXWDBdHI",
+                'merchant_salt': "jdQK6QPc7i",
+        # for production environment use 'https://secure.payu.in/_payment'
+                'payment_url': 'https://test.payu.in/_payment',
+            }
         }
         return getattr(settings, 'PAYU_INFO', PAYU_INFO)
 
 
-class PayuPreRquestView(FormView):
+class PayuPreRequestView(FormView):
     template_name = 'payu/nonseamless/payu_form.html'
     form_class = PayUForm
 
     def get(self, request, *args, **kwargs):
         self.txn = get_object_or_404(NonSeamlessTransaction, txnid=kwargs['txn_id'])
-        return super(PayuPreRquestView, self).get(request, *args, **kwargs)
+        return super(PayuPreRequestView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        conetxt = super(PayuPreRquestView, self).get_context_data(**kwargs)
+        conetxt = super(PayuPreRequestView, self).get_context_data(**kwargs)
         conetxt['action'] = settings.PAYU_INFO.get(self.request.session['currency']).get('payment_url')
 
         return conetxt
@@ -136,15 +144,15 @@ class PayuPreRquestView(FormView):
         """
         Returns the initial data to use for forms on this view.
         """
-        salt = settings.PAYU_INFO.get(self.request.session['currency']).get('merchant_salt')
-        key = settings.PAYU_INFO.get(self.request.session['currency']).get('merchant_key')
+        salt = 'jdQK6QPc7i'
+        key = 'XXWDBdHI'
         txn = self.txn
         curl = self.request.build_absolute_uri(reverse('payu-fail-response', kwargs={'txn_id': txn.txnid}))
         furl = self.request.build_absolute_uri(reverse('payu-cancel-response', kwargs={'txn_id': txn.txnid}))
         surl = self.request.build_absolute_uri(reverse('payu-place-order', kwargs={'txn_id': txn.txnid}))
 
         # print self.txn_id
-        initial = super(PayuPreRquestView, self).get_initial()
+        initial = super(PayuPreRequestView, self).get_initial()
 
         initial['key'] = key
         initial['txnid'] = txn.txnid
@@ -206,7 +214,7 @@ class CancelResponseView(RedirectView):
         return super(CancelResponseView, self).get(request, *args, **kwargs)
 
     def get_redirect_url(self, **kwargs):
-        messages.error(self.request, _("Payu transaction cancelled"))
+        messages.error(self.request, _("PayU transaction cancelled"))
         return reverse('basket:summary')
 
 
@@ -234,8 +242,6 @@ class SuccessResponseView(PaymentDetailsView):
         # Applicator().apply(request=self.request, basket=basket)
         Applicator().apply(basket, self.request.user, self.request)
 
-        print(basket.offer_applications.offers)
-
         return basket
 
     def get_context_data(self, **kwargs):
@@ -252,7 +258,7 @@ class SuccessResponseView(PaymentDetailsView):
         """
 
         error_msg = _(
-                "A problem occurred communicating with Payu "
+                "A problem occurred communicating with PayU "
                 "- please try again later"
         )
 

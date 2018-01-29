@@ -1,4 +1,5 @@
-from django.conf.urls import *
+import django
+from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 
 from oscar.core.application import Application
@@ -18,6 +19,10 @@ class NonSeamLessDashboardApplication(Application):
             url(r'^transactions/(?P<pk>\d+)/$', self.detail_view.as_view(),
                 name='payu-nonseamless-detail'),
         ]
+        if django.VERSION[:2] < (1, 8):
+            from django.conf.urls import patterns
+
+            urlpatterns = patterns('', *urlpatterns)
         return self.post_process_urls(urlpatterns)
 
     def get_url_decorator(self, url_name):
