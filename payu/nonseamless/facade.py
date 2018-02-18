@@ -26,15 +26,14 @@ def generate_hash(data, salt):
     sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT)
     sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT)
     """
-    hash_sum = sha512('')
+    hash_sum = sha512(''.encode('ascii'))
     for key in KEYS:
         if key == 'productinfo':
-            hash_sum.update("%s%s" % (data.get(key, '').encode('ascii', 'ignore').strip(), '|'))
+            hash_sum.update("%s%s".encode('ascii') % (data.get(key, '').encode('ascii', 'ignore').strip(), '|'))
         else:
-            hash_sum.update("%s%s" % (str(data.get(key, '')), '|'))
+            hash_sum.update("%s%s".encode('ascii') % (str(data.get(key, '')), '|'))
     hash_sum.update(salt)
     return hash_sum.hexdigest().lower()
-
 
 def verify_hash(data, salt):
     """

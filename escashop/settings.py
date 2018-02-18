@@ -227,8 +227,8 @@ OSCAR_SHOP_TAGLINE = "It's a huge world, 'Lets get an Escape with Esca'"
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PAYPAL_API_USERNAME = 'rsingh_bemba16-facilitator_api1.thapar.edu'
-PAYPAL_API_PASSWORD = 'ZCH7HQ3HQSPC785P'
-PAYPAL_API_SIGNATURE = 'AFOw2MWb86KxVcUnsoMYwWfZLbwoAt1tbTRzSgr5gTTMJuwXLoVsgpB3'
+PAYPAL_API_USERNAME = 'rds0752-facilitator_api1.gmail.com'
+PAYPAL_API_PASSWORD = '493GADZ8W3DQ7DYQ'
+PAYPAL_API_SIGNATURE = 'Ad9FJ2m.C8oQHWRDydCR9PjtwuG0AzbHS69ilS7KnanCa-M0hIjv7dQ6'
 
 INSTALLED_APPS += ['paypal']
