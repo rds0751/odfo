@@ -53,10 +53,14 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'escashop.urls'
 
+from oscar import OSCAR_MAIN_TEMPLATE_DIR
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            OSCAR_MAIN_TEMPLATE_DIR,
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,41 +198,43 @@ OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
 PAYU_INFO = {
     'INR': {
-        'merchant_key': "XXWDBdHI",
-        'merchant_salt': "jdQK6QPc7i",
+        'merchant_key': "rjQUPktU",
+        'merchant_salt': "e5iIg1jwi8",
         # for production environment use 'https://secure.payu.in/_payment'
         'payment_url': 'https://test.payu.in/_payment',
     }
 }
 
+PAYU_TEST_MODE = True
 
 from django.utils.translation import ugettext_lazy as _
-OSCAR_DASHBOARD_NAVIGATION.append({
-'label': _('Payments'),
-'icon': 'icon-globe',
-'children': [
-{
-'label': _('Paypal Express transactions'),
-'url_name': 'paypal-express-list',
-},
-{
-'label': _('Payu transactions'),
-'url_name': 'payu-nonseamless-list',
-},
-{
-'label': _('COD Transaction Lists'),
-'url_name': 'cashondelivery-transaction-list',
-},
-]
-})
+
+OSCAR_DASHBOARD_NAVIGATION += [{
+    'label': _('Payments'),
+    'icon': 'icon-globe',
+    'children': [
+        {
+            'label': _('Paypal Express transactions'),
+            'url_name': 'paypal-express-list',
+        },
+        {
+            'label': _('Payu transactions'),
+            'url_name': 'payu-nonseamless-list',
+        },
+        {
+            'label': _('COD Transaction Lists'),
+            'url_name': 'cashondelivery-transaction-list',
+        },
+    ]
+}]
 
 OSCAR_SHOP_NAME = 'Escahub'
 OSCAR_SHOP_TAGLINE = "It's a huge world, 'Lets get an Escape with Esca'"
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PAYPAL_API_USERNAME = 'rds0752-facilitator_api1.gmail.com'
-PAYPAL_API_PASSWORD = '493GADZ8W3DQ7DYQ'
-PAYPAL_API_SIGNATURE = 'Ad9FJ2m.C8oQHWRDydCR9PjtwuG0AzbHS69ilS7KnanCa-M0hIjv7dQ6'
+PAYPAL_API_USERNAME = 'travelguru.jimdo_api1.gmail.com'
+PAYPAL_API_PASSWORD = 'D6FNT2LMGJS39UPN'
+PAYPAL_API_SIGNATURE = 'AfzPPZH.t0ety8o.ciNBEdPv7r-OAYp4f3lBFk7wkbakNUhGRmp5jRMQ'
 
 INSTALLED_APPS += ['paypal']
