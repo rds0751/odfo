@@ -142,6 +142,7 @@ class PayuPreRquestView(FormView):
         curl = self.request.build_absolute_uri(reverse('payu-fail-response', kwargs={'txn_id': txn.txnid}))
         furl = self.request.build_absolute_uri(reverse('payu-cancel-response', kwargs={'txn_id': txn.txnid}))
         surl = self.request.build_absolute_uri(reverse('payu-place-order', kwargs={'txn_id': txn.txnid}))
+        service_provider = 'payu_paisa'
 
         # print self.txn_id
         initial = super(PayuPreRquestView, self).get_initial()
@@ -165,6 +166,7 @@ class PayuPreRquestView(FormView):
         initial['surl'] = surl
         initial['furl'] = furl
         initial['curl'] = curl
+        initial['service_provider'] = service_provider
 
         return initial
 

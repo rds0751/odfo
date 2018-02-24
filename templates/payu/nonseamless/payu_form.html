@@ -12,6 +12,7 @@ function redirect_for_payment_at_payu() {
 <h1>Please wait while we redirect you to payment page</h1>
 <form action="{{ action }}" method="post" name="payu_form" style="display:none">
     {% csrf_token %}
+    <input type="hidden" name="service_provider" value="{{ service_provider }}" size="64" />
 {{ form.as_p }}
 </form>
 <body>

@@ -198,14 +198,13 @@ OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
 PAYU_INFO = {
     'INR': {
-        'merchant_key': "rjQUPktU",
-        'merchant_salt': "e5iIg1jwi8",
+        'merchant_key': "gtKFFx",
+        'merchant_salt': "eCwWELxi",
         # for production environment use 'https://secure.payu.in/_payment'
         'payment_url': 'https://test.payu.in/_payment',
     }
 }
 
-PAYU_TEST_MODE = True
 
 from django.utils.translation import ugettext_lazy as _
 

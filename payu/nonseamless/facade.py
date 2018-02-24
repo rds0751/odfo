@@ -12,10 +12,10 @@ KEYS = ('key', 'txnid', 'amount', 'productinfo', 'firstname', 'email',
 
 PAYU_INFO = {
     'INR': {
-        'merchant_key': "GWmXna3u",
-        'merchant_salt': "aRldR9rdYU",
+        'merchant_key': "XXWDBdHI",
+        'merchant_salt': "jdQK6QPc7i",
         # for production environment use 'https://secure.payu.in/_payment'
-        'payment_url': 'https://test.payu.in/_payment',
+        'payment_url': 'https://secure.payu.in/_payment',
     }
 }
 
