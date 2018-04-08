@@ -7,8 +7,8 @@ from django.conf import settings
 from payu.nonseamless.models import NonSeamlessTransaction
 
 KEYS = ('key', 'txnid', 'amount', 'productinfo', 'firstname', 'email',
-        'udf1', 'udf2', 'udf3', 'udf4', 'udf5', 'udf6', 'udf7', 'udf8',
-        'udf9', 'udf10')
+        'udf1', 'udf2', 'udf3', 'udf4', 'udf5',  'udf6',  'udf7', 'udf8',
+        'udf9',  'udf10')
 
 PAYU_INFO = {
     'INR': {
@@ -21,40 +21,41 @@ PAYU_INFO = {
 
 
 def generate_hash(data, salt):
-    """
-    Generates sha512 of form fields in following format.
-    sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT)
-    sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT)
-    """
-    print(data)
+#    keys = ('key', 'txnid', 'amount', 'productinfo', 'firstname', 'email',
+ #           'udf1', 'udf2', 'udf3', 'udf4', 'udf5',  'udf6',  'udf7', 'udf8',
+  #          'udf9',  'udf10')
+   # hash = sha512(str(getattr(settings, 'key', None)).encode('utf-8'))
+    #for key in KEYS:
+     #   hash.update(("%s%s" % ('|', str(data.get(key, '')))).encode("utf-8"))
+    #hash.update(("%s%s".format('|', getattr(settings, 'merchant_salt', None))).encode('utf-8'))
+    #return hash.hexdigest().lower()
 
-    hash_value = sha512(str(getattr(settings, 'key', None)).encode('utf-8'))
-
-    for key in KEYS:
-        if data.get(key) == None:
-            hash_value.update((("%s%s" % ('|', str('')))).encode("utf-8"))
-        else:
-            hash_value.update(("%s%s" % ('|', str(data.get(key, '')))).encode("utf-8"))
-
-    hash_value.update(("%s%s".format('|', getattr(settings, 'merchant_salt', None))).encode('utf-8'))
-
-    return hash_value.hexdigest().lower()
-
-
+    posted={}
+    hashh = ''
+    hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10"
+    posted['key']= getattr(settings, 'merchant_salt', None)
+    hash_string=''
+    hashVarsSeq=hashSequence.split('|')
+    for i in hashVarsSeq:
+        hash_string+=str(data.get(i, ''))
+        hash_string+=''
+        hash_string+='|'
+    
+    hash_string+=salt
+    hashh = sha512(hash_string.encode('utf-8')).hexdigest().lower()
+    return hashh
 
 def verify_hash(data, salt):
-    """
-    Generates sha512 of received data fields in following format.
-    sha512(SALT|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key)
-    """
-    KEYS_REVERSED = KEYS[::-1]
-    hash_sum = sha512('')
-    hash_sum.update(salt)
-    hash_sum.update("%s%s" % ('|', str(data.get('status', ''))))
-    for key in KEYS_REVERSED:
-        hash_sum.update("%s%s" % ('|', str(data.get(key, ''))))
-    return hash_sum.hexdigest().lower() == str(data.get('hash', ''))
+    Reversedkeys = reversed(KEYS)
+    hash_value = sha512(getattr(settings, 'merchant_salt', None))
+    hash_value.update(("%s%s" % ('|', str(data.get('status', '')))).encode('utf-8'))
 
+    for key in Reversedkeys:
+        hash_value.update(("%s%s" % ('|', str(data.get(key, '')))).encode('utf-8'))
+
+    hash_value.update(("%s%s" % ('|', getattr(settings, 'merchant_key', None))).encode('utf-8'))
+
+    return (hash_value.hexdigest().lower() == data.get('hash'))
 
 def get_payu_url():
     """

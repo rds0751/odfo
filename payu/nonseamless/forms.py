@@ -2,11 +2,12 @@ from django import forms
 
 from payu.nonseamless.facade import generate_hash
 
-
+ 
 class PayUForm(forms.Form):
     # payu specific fields
     key = forms.CharField()
     hash = forms.CharField(required=False)
+    hash_string = forms.CharField(required=False)
 
     # cart order related fields
     txnid = forms.CharField()

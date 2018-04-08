@@ -1,1 +1,1 @@
-web: gunicorn escashop.wsgi --log-file -
+web: gunicorn odfo.wsgi --log-file -
